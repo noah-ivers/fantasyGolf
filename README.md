@@ -25,6 +25,18 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Fantasy golf features
+
+This workspace has been adapted into a **fantasy golf** application. The core concepts include:
+
+1. User authentication (sign in/up).
+2. Leagues you can create or join (2–24 players).
+3. Per‑league settings for weekly snake drafts and scoring rules.
+4. Weekly draft windows on Tuesday/Wednesday with a one‑hour timer.
+5. Strict drafting rules (no duplicate golfers, majors/Players double points, etc.).
+
+The UI is being styled with a green golf theme and the feel of a slick fantasy sports app such as Sleeper.
+
 ## Get a fresh project
 
 When you're ready, run:

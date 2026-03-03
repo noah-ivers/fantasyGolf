@@ -5,7 +5,9 @@
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
+// switch the primary/tint color to a golf-friendly green
+// this will be used throughout the app for buttons, tabs, etc.
+const tintColorLight = '#2e7d32'; // a rich green
 const tintColorDark = '#fff';
 
 export const Colors = {
