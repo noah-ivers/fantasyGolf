@@ -23,9 +23,9 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
-      {/* league management tab */}
+      {/* league management tab: stack lives in leagues/_layout.tsx */}
       <Tabs.Screen
-        name="leagues/index"
+        name="leagues"
         options={{
           title: 'Leagues',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.3.fill" color={color} />,
