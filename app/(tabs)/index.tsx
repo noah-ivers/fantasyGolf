@@ -3,27 +3,22 @@ import { ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
+import { Colors, Masters } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Link } from 'expo-router';
-
-const MASTERS_GREEN = '#346C50';
-const MASTERS_CREAM = '#DAD9D4';
-const MASTERS_DARK_BG = '#21483C';
-const MASTERS_GOLD = '#fce300';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const activeTint = Colors[colorScheme].tint;
   const isDark = colorScheme === 'dark';
-  const cardBg = isDark ? MASTERS_DARK_BG : MASTERS_CREAM;
-  const cardText = isDark ? '#E8E4DC' : '#1a2e1a';
-  const sectionTitleColor = isDark ? MASTERS_GOLD : MASTERS_GREEN;
+  const cardBg = isDark ? Masters.darkBg : Masters.cream;
+  const cardText = isDark ? Masters.cardTextDark : Masters.cardTextLight;
+  const sectionTitleColor = isDark ? Masters.goldBright : Masters.green;
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#0B6623', dark: '#012512' }}
-      contentBackgroundColor={{ light: MASTERS_CREAM, dark: MASTERS_DARK_BG }}
+      headerBackgroundColor={{ light: Masters.headerBgLight, dark: Masters.headerBgDark }}
+      contentBackgroundColor={{ light: Masters.cream, dark: Masters.darkBg }}
       headerImage={
         <ImageBackground
           source={require('@/assets/augusta-national.jpg')}
@@ -39,18 +34,18 @@ export default function HomeScreen() {
           </View>
         </ImageBackground>
       }>
-      <ThemedView style={styles.heroCard} lightColor={MASTERS_CREAM} darkColor={MASTERS_DARK_BG}>
+      <ThemedView style={styles.heroCard} lightColor={Masters.cream} darkColor={Masters.darkBg}>
         <ThemedText
           type="title"
-          lightColor={MASTERS_GREEN}
-          darkColor={MASTERS_GOLD}
+          lightColor={Masters.green}
+          darkColor={Masters.goldBright}
           style={styles.mastersTitle}>
           Fantasy Golf
         </ThemedText>
         <ThemedText
           type="subtitle"
-          lightColor={MASTERS_GREEN}
-          darkColor={MASTERS_GOLD}
+          lightColor={Masters.green}
+          darkColor={Masters.goldBright}
           style={styles.mastersSubtitle}>
           Build your league. Draft your golfers. Win the season.
         </ThemedText>
@@ -76,11 +71,11 @@ export default function HomeScreen() {
             </Pressable>
           </Link>
           <Link href="/leagues" asChild>
-            <Pressable style={[styles.secondaryAction, { backgroundColor: isDark ? 'transparent' : MASTERS_CREAM, borderColor: isDark ? MASTERS_GOLD : MASTERS_GREEN }]}>
+            <Pressable style={[styles.secondaryAction, { backgroundColor: isDark ? 'transparent' : Masters.cream, borderColor: isDark ? Masters.goldBright : Masters.green }]}>
               <ThemedText
                 type="defaultSemiBold"
-                lightColor={MASTERS_GREEN}
-                darkColor={MASTERS_GOLD}>
+                lightColor={Masters.green}
+                darkColor={Masters.goldBright}>
                 Join League
               </ThemedText>
             </Pressable>
@@ -173,8 +168,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: MASTERS_GREEN,
-    backgroundColor: MASTERS_CREAM,
+    borderColor: '#346C50',
+    backgroundColor: '#DAD9D4',
   },
   headerGraphic: {
     height: 220,
