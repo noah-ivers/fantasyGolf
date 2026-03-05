@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
@@ -7,29 +7,66 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Link } from 'expo-router';
 
+const MASTERS_GREEN = '#346C50';
+const MASTERS_CREAM = '#DAD9D4';
+const MASTERS_DARK_BG = '#21483C';
+const MASTERS_GOLD = '#fce300';
+
 export default function HomeScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const activeTint = Colors[colorScheme].tint;
+  const isDark = colorScheme === 'dark';
+  const cardBg = isDark ? MASTERS_DARK_BG : MASTERS_CREAM;
+  const cardText = isDark ? '#E8E4DC' : '#1a2e1a';
+  const sectionTitleColor = isDark ? MASTERS_GOLD : MASTERS_GREEN;
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A8D5A2', dark: '#274E13' }}
+      headerBackgroundColor={{ light: '#0B6623', dark: '#012512' }}
+      contentBackgroundColor={{ light: MASTERS_CREAM, dark: MASTERS_DARK_BG }}
       headerImage={
-        <View style={styles.headerGraphic}>
-          <ThemedText style={styles.headerEmoji}>⛳️</ThemedText>
-          <ThemedText style={styles.headerLabel}>TEE TIME</ThemedText>
-        </View>
+        <ImageBackground
+          source={require('@/assets/augusta-national.jpg')}
+          resizeMode="cover"
+          style={styles.headerGraphic}
+          imageStyle={styles.headerImage}>
+          <View style={styles.headerOverlay} />
+          <View style={styles.headerContent}>
+            <ThemedText style={styles.headerTitle}>FANTASY GOLF</ThemedText>
+            <ThemedText style={styles.headerSubtitle}>
+              Weekly fantasy built for Golf Enthusiasts.
+            </ThemedText>
+          </View>
+        </ImageBackground>
       }>
-      <ThemedView style={styles.heroCard} lightColor="#EAF8EA" darkColor="#1D2B1D">
-        <ThemedText type="title">Fantasy Golf</ThemedText>
-        <ThemedText type="subtitle">Build your league. Draft your golfers. Win the season.</ThemedText>
-        <ThemedText>
+      <ThemedView style={styles.heroCard} lightColor={MASTERS_CREAM} darkColor={MASTERS_DARK_BG}>
+        <ThemedText
+          type="title"
+          lightColor={MASTERS_GREEN}
+          darkColor={MASTERS_GOLD}
+          style={styles.mastersTitle}>
+          Fantasy Golf
+        </ThemedText>
+        <ThemedText
+          type="subtitle"
+          lightColor={MASTERS_GREEN}
+          darkColor={MASTERS_GOLD}
+          style={styles.mastersSubtitle}>
+          Build your league. Draft your golfers. Win the season.
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
           Weekly two-round snake drafts with season-long standings, major boosts, and Golden Golfer strategy.
         </ThemedText>
       </ThemedView>
 
-      <ThemedView style={styles.sectionCard}>
-        <ThemedText type="subtitle">Quick Actions</ThemedText>
+      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg }]}>
+        <ThemedText
+          type="subtitle"
+          lightColor={sectionTitleColor}
+          darkColor={sectionTitleColor}
+          style={styles.mastersSubtitle}>
+          Quick Actions
+        </ThemedText>
         <View style={styles.actionsRow}>
           <Link href="/leagues" asChild>
             <Pressable style={[styles.primaryAction, { backgroundColor: activeTint }]}>
@@ -39,26 +76,57 @@ export default function HomeScreen() {
             </Pressable>
           </Link>
           <Link href="/leagues" asChild>
-            <Pressable style={styles.secondaryAction}>
-              <ThemedText type="defaultSemiBold">Join League</ThemedText>
+            <Pressable style={[styles.secondaryAction, { backgroundColor: isDark ? 'transparent' : MASTERS_CREAM, borderColor: isDark ? MASTERS_GOLD : MASTERS_GREEN }]}>
+              <ThemedText
+                type="defaultSemiBold"
+                lightColor={MASTERS_GREEN}
+                darkColor={MASTERS_GOLD}>
+                Join League
+              </ThemedText>
             </Pressable>
           </Link>
         </View>
       </ThemedView>
 
-      <ThemedView style={styles.sectionCard}>
-        <ThemedText type="subtitle">This Week</ThemedText>
-        <ThemedText>Round 1 draft: Tuesday</ThemedText>
-        <ThemedText>Round 2 draft: Wednesday</ThemedText>
-        <ThemedText>Pick window: 1 hour per turn, snake order</ThemedText>
+      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg }]}>
+        <ThemedText
+          type="subtitle"
+          lightColor={sectionTitleColor}
+          darkColor={sectionTitleColor}
+          style={styles.mastersSubtitle}>
+          This Week
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
+          Round 1 draft: Tuesday
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
+          Round 2 draft: Wednesday
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
+          Pick window: 1 hour per turn, snake order
+        </ThemedText>
       </ThemedView>
 
-      <ThemedView style={styles.sectionCard}>
-        <ThemedText type="subtitle">Scoring Snapshot</ThemedText>
-        <ThemedText>• Make the cut = points from total prize money</ThemedText>
-        <ThemedText>• Miss the cut = 0 points</ThemedText>
-        <ThemedText>• Majors + Players = double points</ThemedText>
-        <ThemedText>• Golden Golfer = one-time round-two boost (non-major week)</ThemedText>
+      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg }]}>
+        <ThemedText
+          type="subtitle"
+          lightColor={sectionTitleColor}
+          darkColor={sectionTitleColor}
+          style={styles.mastersSubtitle}>
+          Scoring Snapshot
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
+          • Make the cut = points from total prize money
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
+          • Miss the cut = 0 points
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
+          • Majors + Players = double points
+        </ThemedText>
+        <ThemedText lightColor={cardText} darkColor={cardText}>
+          • Golden Golfer = one-time round-two boost (non-major week)
+        </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -67,15 +135,23 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   heroCard: {
     borderRadius: 18,
-    padding: 18,
-    gap: 8,
-  },
-  sectionCard: {
-    borderRadius: 16,
-    padding: 16,
+    padding: 20,
     gap: 8,
     borderWidth: 1,
-    borderColor: 'rgba(46, 125, 50, 0.25)',
+    borderColor: 'rgba(11, 102, 35, 0.6)',
+  },
+  sectionCard: {
+    borderRadius: 18,
+    padding: 18,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(11, 102, 35, 0.4)',
+  },
+  mastersTitle: {
+    fontFamily: 'Baskerville',
+  },
+  mastersSubtitle: {
+    fontFamily: 'Baskerville',
   },
   actionsRow: {
     marginTop: 8,
@@ -84,33 +160,47 @@ const styles = StyleSheet.create({
   },
   primaryAction: {
     paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: 12,
+    paddingHorizontal: 22,
+    borderRadius: 999,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 130,
+    borderWidth: 1,
+    borderColor: '#D4AF37',
   },
   secondaryAction: {
     paddingVertical: 12,
-    paddingHorizontal: 14,
-    borderRadius: 12,
+    paddingHorizontal: 18,
+    borderRadius: 999,
     borderWidth: 1,
-    borderColor: 'rgba(46, 125, 50, 0.35)',
-    backgroundColor: 'rgba(46, 125, 50, 0.08)',
+    borderColor: MASTERS_GREEN,
+    backgroundColor: MASTERS_CREAM,
   },
   headerGraphic: {
-    height: 178,
-    width: 290,
-    left: 0,
-    bottom: 0,
-    position: 'absolute',
-    alignItems: 'center',
+    height: 220,
+    width: '100%',
     justifyContent: 'center',
   },
-  headerEmoji: {
-    fontSize: 58,
-    lineHeight: 64,
+  headerImage: {
+    width: '100%',
   },
-  headerLabel: {
-    marginTop: 6,
-    letterSpacing: 2,
+  headerOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(19, 58, 29, 0.6)',
+  },
+  headerContent: {
+    alignItems: 'center',
+    paddingBottom: 0,
+    gap: 4,
+  },
+  headerTitle: {
+    fontSize: 22,
     fontWeight: '700',
+    fontFamily: 'Baskerville',
+    color: '#FFFFFF',
+  },
+  headerSubtitle: {
+    fontSize: 13,
+    color: 'rgba(231, 255, 235, 0.9)',
   },
 });
