@@ -8,7 +8,7 @@ import {
 } from '@/models/league';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Link, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -27,6 +27,7 @@ const MASTERS_GREEN = '#0B6623';
 const MASTERS_CREAM = '#F5F0E6';
 const MASTERS_DARK_BG = '#0D1F0D';
 const MASTERS_GOLD = '#C9A227';
+const ERROR_COLOR = '#D32F2F';
 
 const PLACEHOLDER_OWNER = 'me'; // TODO: replace with real auth
 
@@ -45,9 +46,12 @@ export default function CreateLeagueScreen() {
   const [pickTimeLimitMinutes, setPickTimeLimitMinutes] = useState(60);
   const [allowGoldenGolfer, setAllowGoldenGolfer] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [nameError, setNameError] = useState('');
+
+  const trimmedName = name.trim();
 
   const settings: LeagueSettings = defaultLeagueSettings({
-    name: name.trim() || 'New League',
+    name: trimmedName,
     owner: PLACEHOLDER_OWNER,
     maxPlayers,
     scoring: {
@@ -63,8 +67,17 @@ export default function CreateLeagueScreen() {
     draftOrderThisWeek: [],
   });
 
+  const handleNameChange = useCallback((t: string) => {
+    setName(t);
+    if (nameError) setNameError('');
+  }, [nameError]);
+
   const handleCreate = () => {
     if (submitting) return;
+    if (!trimmedName) {
+      setNameError('League name is required.');
+      return;
+    }
     setSubmitting(true);
     const league: League = {
       id: `league-${Date.now()}`,
@@ -95,11 +108,14 @@ export default function CreateLeagueScreen() {
           <ThemedText style={[styles.label, { color: labelColor }]}>League name</ThemedText>
           <TextInput
             value={name}
-            onChangeText={setName}
+            onChangeText={handleNameChange}
             placeholder="e.g. Masters Pool 2026"
             placeholderTextColor={isDark ? '#888' : '#666'}
-            style={[styles.input, { color: textColor, borderColor: isDark ? MASTERS_GOLD : MASTERS_GREEN }]}
+            style={[styles.input, { color: textColor, borderColor: nameError ? ERROR_COLOR : isDark ? MASTERS_GOLD : MASTERS_GREEN }]}
           />
+          {nameError ? (
+            <ThemedText style={styles.errorText}>{nameError}</ThemedText>
+          ) : null}
         </View>
 
         <View style={[styles.card, { backgroundColor: cardBg }]}>
@@ -166,8 +182,8 @@ export default function CreateLeagueScreen() {
 
         <Pressable
           onPress={handleCreate}
-          disabled={submitting}
-          style={[styles.createBtn, { backgroundColor: tint }]}>
+          disabled={submitting || !trimmedName}
+          style={[styles.createBtn, { backgroundColor: tint, opacity: !trimmedName ? 0.5 : 1 }]}>
           {submitting ? (
             <ActivityIndicator color="#fff" />
           ) : (
@@ -227,6 +243,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
+  },
+  errorText: {
+    color: ERROR_COLOR,
+    fontSize: 12,
+    marginTop: 4,
   },
   smallInput: {
     borderWidth: 1,
