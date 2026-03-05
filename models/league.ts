@@ -59,13 +59,13 @@ export const DEFAULT_SCORING_SETTINGS: ScoringSettings = {
 export function defaultLeagueSettings(overrides: Partial<LeagueSettings> & { name: string; owner: UserID }): LeagueSettings {
     const maxPlayers = overrides.maxPlayers ?? 8;
     return {
+        ...overrides,
         name: overrides.name,
         owner: overrides.owner,
         maxPlayers: Math.max(LEAGUE_MIN_PLAYERS, Math.min(LEAGUE_MAX_PLAYERS, maxPlayers)),
-        draftOrderThisWeek: [],
+        draftOrderThisWeek: overrides.draftOrderThisWeek ?? [],
         scoring: overrides.scoring ?? { ...DEFAULT_SCORING_SETTINGS },
         draft: overrides.draft ?? { ...DEFAULT_DRAFT_SETTINGS },
-        ...overrides,
     };
 }
 
