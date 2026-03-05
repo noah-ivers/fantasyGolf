@@ -91,5 +91,4 @@ const styles = StyleSheet.create({
   cardTitle: { fontSize: 18, fontWeight: '700', marginBottom: 4 },
   cardMeta: { fontSize: 14 },
   empty: { textAlign: 'center', paddingVertical: 32 },
-  link: { padding: 12, borderBottomWidth: 1 },
 });
