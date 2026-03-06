@@ -10,6 +10,24 @@ import { Platform } from 'react-native';
 const tintColorLight = '#2e7d32'; // a rich green
 const tintColorDark = '#fff';
 
+/** Global Masters/golf theme palette – use these for consistent styling across Home, Leagues, etc. */
+export const Masters = {
+  green: '#346C50',
+  greenDark: '#0B6623',
+  cream: '#DAD9D4',
+  creamAlt: '#EBE6DC',
+  darkBg: '#21483C',
+  darkBgAlt: '#152515',
+  gold: '#D4AF37',
+  goldBright: '#fce300',
+  cardBorder: 'rgba(11, 102, 35, 0.4)',
+  cardBorderLight: 'rgba(11, 102, 35, 0.6)',
+  cardTextLight: '#1a2e1a',
+  cardTextDark: '#E8E4DC',
+  headerBgLight: '#0B6623',
+  headerBgDark: '#012512',
+} as const;
+
 export const Colors = {
   light: {
     text: '#11181C',
