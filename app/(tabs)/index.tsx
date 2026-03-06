@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: '#346C50',
-    backgroundColor: '#DAD9D4',
+    borderColor: Masters.secondaryActionBorder,
+    backgroundColor: Masters.secondaryActionBackground,
   },
   headerGraphic: {
     height: 220,
