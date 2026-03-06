@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#D4AF37',
     minWidth: 160,
   },
   listContent: { paddingHorizontal: 20, paddingBottom: 24 },
