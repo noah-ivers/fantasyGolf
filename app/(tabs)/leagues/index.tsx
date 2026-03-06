@@ -80,7 +80,7 @@ export default function LeaguesScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   header: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 12, alignItems: 'center' },
-  title: { marginBottom: 4, fontFamily: 'Baskerville'},
+  title: { marginBottom: 4 },
   subtitle: { fontSize: 14 },
   createBtnWrap: {
     width: '100%',
