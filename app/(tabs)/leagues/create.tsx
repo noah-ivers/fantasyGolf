@@ -1,8 +1,6 @@
 import { useLeagues } from '@/contexts/leagues-context';
 import {
   defaultLeagueSettings,
-  LEAGUE_MAX_PLAYERS,
-  LEAGUE_MIN_PLAYERS,
   League,
   LeagueSettings,
 } from '@/models/league';
@@ -18,28 +16,38 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Colors } from '@/constants/theme';
-
-const MASTERS_GREEN = '#0B6623';
-const MASTERS_CREAM = '#F5F0E6';
-const MASTERS_DARK_BG = '#0D1F0D';
-const MASTERS_GOLD = '#C9A227';
+import { Colors, Masters } from '@/constants/theme';
 const ERROR_COLOR = '#D32F2F';
 
 const PLACEHOLDER_OWNER = 'me'; // TODO: replace with real auth
 
+const MIN_LEAGUE_NAME_LENGTH = 4;
+
+function isValidLeagueName(value: string): boolean {
+  const trimmed = value.trim();
+  if (trimmed.length < MIN_LEAGUE_NAME_LENGTH) return false;
+  if (/\s/.test(trimmed)) return false; // no whitespace allowed
+  return true;
+}
+
 export default function CreateLeagueScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { addLeague } = useLeagues();
   const colorScheme = useColorScheme() ?? 'light';
   const isDark = colorScheme === 'dark';
   const tint = Colors[colorScheme].tint;
+  const createBtnBg = isDark ? Masters.greenDark : tint;
+  const bg = isDark ? Masters.darkBg : Masters.cream;
+  const cardBg = isDark ? Masters.darkBgAlt : Masters.creamAlt;
+  const textColor = isDark ? Masters.cardTextDark : Masters.cardTextLight;
+  const labelColor = isDark ? Masters.goldBright : Masters.green;
 
   const [name, setName] = useState('');
-  const [maxPlayers, setMaxPlayers] = useState(8);
   const [doubleMajors, setDoubleMajors] = useState(true);
   const [allowLIV, setAllowLIV] = useState(false);
   const [snakeOrder, setSnakeOrder] = useState(true);
@@ -51,9 +59,9 @@ export default function CreateLeagueScreen() {
   const trimmedName = name.trim();
 
   const settings: LeagueSettings = defaultLeagueSettings({
-    name: trimmedName,
+    name: name.trim(),
     owner: PLACEHOLDER_OWNER,
-    maxPlayers,
+    maxPlayers: 1, // grows as users are invited
     scoring: {
       doubleMajors,
       allowLIV,
@@ -73,11 +81,7 @@ export default function CreateLeagueScreen() {
   }, [nameError]);
 
   const handleCreate = () => {
-    if (submitting) return;
-    if (!trimmedName) {
-      setNameError('League name is required.');
-      return;
-    }
+    if (submitting || !isValidLeagueName(name)) return;
     setSubmitting(true);
     const league: League = {
       id: `league-${Date.now()}`,
@@ -89,52 +93,33 @@ export default function CreateLeagueScreen() {
     router.replace('/leagues');
   };
 
-  const bg = isDark ? MASTERS_DARK_BG : MASTERS_CREAM;
-  const cardBg = isDark ? '#152515' : '#EBE6DC';
-  const textColor = isDark ? '#E8E4DC' : '#1a2e1a';
-  const labelColor = isDark ? MASTERS_GOLD : MASTERS_GREEN;
-
   return (
     <ThemedView style={[styles.container, { backgroundColor: bg }]}>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: Math.max(insets.top, 20) }]}
+      >
         <ThemedText type="title" style={[styles.title, { color: labelColor }]}>
           Create league
         </ThemedText>
         <ThemedText style={[styles.subtitle, { color: textColor }]}>
-          Set name, size (2–20 players), and options below.
+          Set name and options below. Invite members after creating.
         </ThemedText>
 
         <View style={[styles.card, { backgroundColor: cardBg }]}>
           <ThemedText style={[styles.label, { color: labelColor }]}>League name</ThemedText>
           <TextInput
             value={name}
-            onChangeText={handleNameChange}
-            placeholder="e.g. Masters Pool 2026"
+            onChangeText={(t) => setName(t.replace(/\s/g, ''))}
+            placeholder="e.g. MastersPool2026"
             placeholderTextColor={isDark ? '#888' : '#666'}
-            style={[styles.input, { color: textColor, borderColor: nameError ? ERROR_COLOR : isDark ? MASTERS_GOLD : MASTERS_GREEN }]}
+            style={[styles.input, { color: textColor, borderColor: labelColor }]}
           />
-          {nameError ? (
-            <ThemedText style={styles.errorText}>{nameError}</ThemedText>
-          ) : null}
-        </View>
-
-        <View style={[styles.card, { backgroundColor: cardBg }]}>
-          <ThemedText style={[styles.label, { color: labelColor }]}>
-            Number of players ({LEAGUE_MIN_PLAYERS}–{LEAGUE_MAX_PLAYERS})
-          </ThemedText>
-          <View style={styles.row}>
-            <Pressable
-              onPress={() => setMaxPlayers((n) => Math.max(LEAGUE_MIN_PLAYERS, n - 1))}
-              style={[styles.stepperBtn, { borderColor: labelColor }]}>
-              <ThemedText style={{ color: labelColor }}>−</ThemedText>
-            </Pressable>
-            <ThemedText style={[styles.stepperValue, { color: textColor }]}>{maxPlayers}</ThemedText>
-            <Pressable
-              onPress={() => setMaxPlayers((n) => Math.min(LEAGUE_MAX_PLAYERS, n + 1))}
-              style={[styles.stepperBtn, { borderColor: labelColor }]}>
-              <ThemedText style={{ color: labelColor }}>+</ThemedText>
-            </Pressable>
-          </View>
+          {name.length > 0 && !isValidLeagueName(name) && (
+            <ThemedText style={[styles.errorText, { color: '#c62828' }]}>
+              Min {MIN_LEAGUE_NAME_LENGTH} characters, no spaces
+            </ThemedText>
+          )}
         </View>
 
         <View style={[styles.card, { backgroundColor: cardBg }]}>
@@ -182,8 +167,14 @@ export default function CreateLeagueScreen() {
 
         <Pressable
           onPress={handleCreate}
-          disabled={submitting || !trimmedName}
-          style={[styles.createBtn, { backgroundColor: tint, opacity: !trimmedName ? 0.5 : 1 }]}>
+          disabled={submitting || !isValidLeagueName(name)}
+          style={[
+            styles.createBtn,
+            {
+              backgroundColor: createBtnBg,
+              opacity: submitting || !isValidLeagueName(name) ? 0.6 : 1,
+            },
+          ]}>
           {submitting ? (
             <ActivityIndicator color="#fff" />
           ) : (
@@ -217,7 +208,7 @@ function RowSwitch({
   return (
     <View style={styles.switchRow}>
       <ThemedText style={[styles.switchLabel, { color: textColor }]}>{label}</ThemedText>
-      <Switch value={value} onValueChange={onValueChange} trackColor={{ false: '#666', true: MASTERS_GREEN }} thumbColor="#fff" />
+      <Switch value={value} onValueChange={onValueChange} trackColor={{ false: '#666', true: Masters.green }} thumbColor="#fff" />
     </View>
   );
 }
@@ -226,14 +217,14 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   scroll: { flex: 1 },
   scrollContent: { padding: 20, paddingBottom: 40 },
-  title: { marginBottom: 4 },
-  subtitle: { marginBottom: 20, fontSize: 14 },
+  title: { marginBottom: 4, textAlign: 'center' },
+  subtitle: { marginBottom: 20, fontSize: 14, textAlign: 'center' },
   card: {
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: 'rgba(11, 102, 35, 0.3)',
+    borderColor: Masters.cardBorder,
   },
   label: { fontSize: 14, fontWeight: '600', marginBottom: 8 },
   sectionLabel: { fontSize: 16, fontWeight: '700', marginBottom: 12 },
@@ -278,10 +269,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   cancelBtn: {
-    paddingVertical: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: 999,
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderRadius: 12,
     marginTop: 12,
+    minHeight: 52,
   },
 });
