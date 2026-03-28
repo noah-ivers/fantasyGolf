@@ -16,6 +16,7 @@ export default function LeaguesScreen() {
   const createBtnBg = isDark ? Masters.greenDark : tint;
   const bg = isDark ? Masters.darkBg : Masters.cream;
   const cardBg = isDark ? Masters.darkBgAlt : Masters.creamAlt;
+  const cardBorder = isDark ? Masters.cardBorder : Masters.cardBorderLight;
   const textColor = isDark ? Masters.cardTextDark : Masters.cardTextLight;
   const labelColor = isDark ? Masters.goldBright : Masters.green;
 
@@ -40,7 +41,7 @@ export default function LeaguesScreen() {
                 styles.createBtnInner,
                 {
                   backgroundColor: createBtnBg,
-                  borderColor: Masters.gold,
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.18)' : 'rgba(0, 0, 0, 0.08)',
                 },
               ]}>
               <ThemedText lightColor="#FFFFFF" darkColor="#FFFFFF" type="defaultSemiBold">
@@ -57,7 +58,7 @@ export default function LeaguesScreen() {
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
           <Link href={`/leagues/${item.id}`} asChild>
-            <Pressable style={[styles.card, { backgroundColor: cardBg }]}>
+            <Pressable style={[styles.card, { backgroundColor: cardBg, borderColor: cardBorder }]}>
               <ThemedText style={[styles.cardTitle, { color: labelColor }]}>
                 {item.settings.name}
               </ThemedText>
@@ -103,11 +104,10 @@ const styles = StyleSheet.create({
   },
   listContent: { paddingHorizontal: 20, paddingBottom: 24 },
   card: {
-    borderRadius: 16,
+    borderRadius: 14,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: 'rgba(11, 102, 35, 0.4)',
   },
   cardTitle: { fontSize: 18, fontWeight: '700', marginBottom: 4 },
   cardMeta: { fontSize: 14 },

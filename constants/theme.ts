@@ -3,47 +3,86 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
+import { DarkTheme, DefaultTheme, type Theme } from '@react-navigation/native';
 import { Platform } from 'react-native';
 
-// switch the primary/tint color to a golf-friendly green
-// this will be used throughout the app for buttons, tabs, etc.
-const tintColorLight = '#2e7d32'; // a rich green
-const tintColorDark = '#fff';
+/** Primary accent — high-contrast on dark (Spotify-style green). */
+const accent = '#1DB954';
 
-/** Global Masters/golf theme palette – use these for consistent styling across Home, Leagues, etc. */
+const tintColorLight = '#1a7f37';
+const tintColorDark = accent;
+
+/**
+ * Semantic surfaces and text. Dark mode is tuned like Spotify / VS Code: near-black bases,
+ * lifted cards, subtle borders, crisp accent.
+ */
 export const Masters = {
-  green: '#346C50',
-  greenDark: '#0B6623',
-  cream: '#DAD9D4',
-  creamAlt: '#EBE6DC',
-  darkBg: '#21483C',
-  darkBgAlt: '#152515',
-  gold: '#D4AF37',
-  goldBright: '#fce300',
-  cardBorder: 'rgba(11, 102, 35, 0.4)',
-  cardBorderLight: 'rgba(11, 102, 35, 0.6)',
-  cardTextLight: '#1a2e1a',
-  cardTextDark: '#E8E4DC',
-  headerBgLight: '#0B6623',
-  headerBgDark: '#012512',
+  green: '#1a7f37',
+  greenDark: accent,
+  cream: '#f0f0f0',
+  creamAlt: '#ffffff',
+  darkBg: '#121212',
+  darkBgAlt: '#1e1e1e',
+  gold: accent,
+  goldBright: '#ffffff',
+  cardBorder: 'rgba(255, 255, 255, 0.1)',
+  cardBorderLight: 'rgba(0, 0, 0, 0.08)',
+  cardTextLight: '#141414',
+  cardTextDark: '#b3b3b3',
+  headerBgLight: '#e8e8e8',
+  headerBgDark: '#0d0d0d',
+  /** Muted line for outlined controls (light). */
+  secondaryActionBorder: 'rgba(0, 0, 0, 0.12)',
+  secondaryActionBackground: 'transparent',
+  link: '#4ea3ff',
+  linkLight: '#0969da',
+  danger: '#f85149',
 } as const;
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
+    text: '#141414',
+    background: '#f0f0f0',
     tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
+    icon: '#6e6e6e',
+    tabIconDefault: '#6e6e6e',
     tabIconSelected: tintColorLight,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
+    text: '#e8e8e8',
+    background: Masters.darkBg,
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    icon: '#8b8b8b',
+    tabIconDefault: '#8b8b8b',
+    tabIconSelected: accent,
+  },
+};
+
+/** React Navigation — matches app dark surfaces. */
+export const NavigationDarkTheme: Theme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: accent,
+    background: Masters.darkBg,
+    card: Masters.darkBgAlt,
+    text: '#ffffff',
+    border: 'rgba(255, 255, 255, 0.12)',
+    notification: accent,
+  },
+};
+
+/** React Navigation — clean light surfaces. */
+export const NavigationLightTheme: Theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: tintColorLight,
+    background: Colors.light.background,
+    card: Masters.creamAlt,
+    text: Colors.light.text,
+    border: 'rgba(0, 0, 0, 0.08)',
+    notification: tintColorLight,
   },
 };
 
