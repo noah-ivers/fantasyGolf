@@ -11,9 +11,10 @@ export default function HomeScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const activeTint = Colors[colorScheme].tint;
   const isDark = colorScheme === 'dark';
-  const cardBg = isDark ? Masters.darkBg : Masters.cream;
+  const cardBg = isDark ? Masters.darkBgAlt : Masters.creamAlt;
   const cardText = isDark ? Masters.cardTextDark : Masters.cardTextLight;
   const sectionTitleColor = isDark ? Masters.goldBright : Masters.green;
+  const surfaceBorder = isDark ? Masters.cardBorder : Masters.cardBorderLight;
 
   return (
     <ParallaxScrollView
@@ -34,19 +35,22 @@ export default function HomeScreen() {
           </View>
         </ImageBackground>
       }>
-      <ThemedView style={styles.heroCard} lightColor={Masters.cream} darkColor={Masters.darkBg}>
+      <ThemedView
+        style={[styles.heroCard, { borderColor: surfaceBorder }]}
+        lightColor={Masters.creamAlt}
+        darkColor={Masters.darkBgAlt}>
         <ThemedText
           type="title"
           lightColor={Masters.green}
           darkColor={Masters.goldBright}
-          style={styles.mastersTitle}>
+          style={styles.heroTitle}>
           Fantasy Golf
         </ThemedText>
         <ThemedText
           type="subtitle"
           lightColor={Masters.green}
           darkColor={Masters.goldBright}
-          style={styles.mastersSubtitle}>
+          style={styles.heroSubtitle}>
           Build your league. Draft your golfers. Win the season.
         </ThemedText>
         <ThemedText lightColor={cardText} darkColor={cardText}>
@@ -54,28 +58,42 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
-      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg }]}>
+      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg, borderColor: surfaceBorder }]}>
         <ThemedText
           type="subtitle"
           lightColor={sectionTitleColor}
           darkColor={sectionTitleColor}
-          style={styles.mastersSubtitle}>
+          style={styles.sectionHeading}>
           Quick Actions
         </ThemedText>
         <View style={styles.actionsRow}>
           <Link href="/leagues" asChild>
-            <Pressable style={[styles.primaryAction, { backgroundColor: activeTint }]}>
+            <Pressable
+              style={[
+                styles.primaryAction,
+                {
+                  backgroundColor: activeTint,
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.22)' : 'rgba(0, 0, 0, 0.12)',
+                },
+              ]}>
               <ThemedText lightColor="#FFFFFF" darkColor="#FFFFFF" type="defaultSemiBold">
                 Create League
               </ThemedText>
             </Pressable>
           </Link>
           <Link href="/leagues" asChild>
-            <Pressable style={[styles.secondaryAction, { backgroundColor: isDark ? 'transparent' : Masters.cream, borderColor: isDark ? Masters.goldBright : Masters.green }]}>
+            <Pressable
+              style={[
+                styles.secondaryAction,
+                {
+                  backgroundColor: isDark ? Masters.darkBgAlt : 'transparent',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.22)' : Masters.green,
+                },
+              ]}>
               <ThemedText
                 type="defaultSemiBold"
                 lightColor={Masters.green}
-                darkColor={Masters.goldBright}>
+                darkColor={Masters.greenDark}>
                 Join League
               </ThemedText>
             </Pressable>
@@ -83,12 +101,12 @@ export default function HomeScreen() {
         </View>
       </ThemedView>
 
-      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg }]}>
+      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg, borderColor: surfaceBorder }]}>
         <ThemedText
           type="subtitle"
           lightColor={sectionTitleColor}
           darkColor={sectionTitleColor}
-          style={styles.mastersSubtitle}>
+          style={styles.sectionHeading}>
           This Week
         </ThemedText>
         <ThemedText lightColor={cardText} darkColor={cardText}>
@@ -102,12 +120,12 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
 
-      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg }]}>
+      <ThemedView style={[styles.sectionCard, { backgroundColor: cardBg, borderColor: surfaceBorder }]}>
         <ThemedText
           type="subtitle"
           lightColor={sectionTitleColor}
           darkColor={sectionTitleColor}
-          style={styles.mastersSubtitle}>
+          style={styles.sectionHeading}>
           Scoring Snapshot
         </ThemedText>
         <ThemedText lightColor={cardText} darkColor={cardText}>
@@ -129,24 +147,25 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   heroCard: {
-    borderRadius: 18,
+    borderRadius: 14,
     padding: 20,
     gap: 8,
     borderWidth: 1,
-    borderColor: 'rgba(11, 102, 35, 0.6)',
   },
   sectionCard: {
-    borderRadius: 18,
+    borderRadius: 14,
     padding: 18,
     gap: 8,
     borderWidth: 1,
-    borderColor: 'rgba(11, 102, 35, 0.4)',
   },
-  mastersTitle: {
-    fontFamily: 'Baskerville',
+  heroTitle: {
+    letterSpacing: -0.5,
   },
-  mastersSubtitle: {
-    fontFamily: 'Baskerville',
+  heroSubtitle: {
+    letterSpacing: -0.2,
+  },
+  sectionHeading: {
+    letterSpacing: -0.3,
   },
   actionsRow: {
     marginTop: 8,
@@ -161,7 +180,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minWidth: 130,
     borderWidth: 1,
-    borderColor: '#D4AF37',
   },
   secondaryAction: {
     paddingVertical: 12,
@@ -181,7 +199,7 @@ const styles = StyleSheet.create({
   },
   headerOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(19, 58, 29, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.52)',
   },
   headerContent: {
     alignItems: 'center',
@@ -191,11 +209,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    fontFamily: 'Baskerville',
     color: '#FFFFFF',
+    letterSpacing: 1.2,
   },
   headerSubtitle: {
     fontSize: 13,
-    color: 'rgba(231, 255, 235, 0.9)',
+    color: 'rgba(255, 255, 255, 0.78)',
   },
 });

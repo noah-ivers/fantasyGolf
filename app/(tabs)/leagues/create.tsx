@@ -46,6 +46,7 @@ export default function CreateLeagueScreen() {
   const cardBg = isDark ? Masters.darkBgAlt : Masters.creamAlt;
   const textColor = isDark ? Masters.cardTextDark : Masters.cardTextLight;
   const labelColor = isDark ? Masters.goldBright : Masters.green;
+  const cardBorder = isDark ? Masters.cardBorder : Masters.cardBorderLight;
 
   const [name, setName] = useState('');
   const [doubleMajors, setDoubleMajors] = useState(true);
@@ -106,7 +107,7 @@ export default function CreateLeagueScreen() {
           Set name and options below. Invite members after creating.
         </ThemedText>
 
-        <View style={[styles.card, { backgroundColor: cardBg }]}>
+        <View style={[styles.card, { backgroundColor: cardBg, borderColor: cardBorder }]}>
           <ThemedText style={[styles.label, { color: labelColor }]}>League name</ThemedText>
           <TextInput
             value={name}
@@ -122,35 +123,39 @@ export default function CreateLeagueScreen() {
           )}
         </View>
 
-        <View style={[styles.card, { backgroundColor: cardBg }]}>
+        <View style={[styles.card, { backgroundColor: cardBg, borderColor: cardBorder }]}>
           <ThemedText style={[styles.sectionLabel, { color: labelColor }]}>Scoring</ThemedText>
           <RowSwitch
             label="Double points for Majors + Players"
             value={doubleMajors}
             onValueChange={setDoubleMajors}
             textColor={textColor}
+            isDark={isDark}
           />
           <RowSwitch
             label="Allow LIV golfers"
             value={allowLIV}
             onValueChange={setAllowLIV}
             textColor={textColor}
+            isDark={isDark}
           />
         </View>
 
-        <View style={[styles.card, { backgroundColor: cardBg }]}>
+        <View style={[styles.card, { backgroundColor: cardBg, borderColor: cardBorder }]}>
           <ThemedText style={[styles.sectionLabel, { color: labelColor }]}>Draft</ThemedText>
           <RowSwitch
             label="Snake order (round 2 reverses)"
             value={snakeOrder}
             onValueChange={setSnakeOrder}
             textColor={textColor}
+            isDark={isDark}
           />
           <RowSwitch
             label="Golden Golfer (one-time boost)"
             value={allowGoldenGolfer}
             onValueChange={setAllowGoldenGolfer}
             textColor={textColor}
+            isDark={isDark}
           />
           <View style={styles.row}>
             <ThemedText style={[styles.label, { color: textColor }]}>
@@ -199,16 +204,23 @@ function RowSwitch({
   value,
   onValueChange,
   textColor,
+  isDark,
 }: {
   label: string;
   value: boolean;
   onValueChange: (v: boolean) => void;
   textColor: string;
+  isDark: boolean;
 }) {
   return (
     <View style={styles.switchRow}>
       <ThemedText style={[styles.switchLabel, { color: textColor }]}>{label}</ThemedText>
-      <Switch value={value} onValueChange={onValueChange} trackColor={{ false: '#666', true: Masters.green }} thumbColor="#fff" />
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        trackColor={{ false: isDark ? '#3e3e3e' : '#d0d0d0', true: Masters.greenDark }}
+        thumbColor="#fff"
+      />
     </View>
   );
 }
@@ -220,11 +232,10 @@ const styles = StyleSheet.create({
   title: { marginBottom: 4, textAlign: 'center' },
   subtitle: { marginBottom: 20, fontSize: 14, textAlign: 'center' },
   card: {
-    borderRadius: 16,
+    borderRadius: 14,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: Masters.cardBorder,
   },
   label: { fontSize: 14, fontWeight: '600', marginBottom: 8 },
   sectionLabel: { fontSize: 16, fontWeight: '700', marginBottom: 12 },
